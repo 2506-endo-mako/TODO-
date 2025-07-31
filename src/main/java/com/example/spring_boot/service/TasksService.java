@@ -5,8 +5,12 @@ import com.example.spring_boot.repository.TasksRepository;
 import com.example.spring_boot.repository.entity.Tasks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.util.StringUtils;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -17,8 +21,33 @@ public class TasksService {
     /*
      * タスク情報取得処理
      */
-    public List<TasksForm> findAllTasks() {
-        List<Tasks> results = tasksRepository.findAllByOrderByLimitDateAsc();
+    public List<TasksForm> findAllTasks(String startDate, String endDate, String content, String status) {
+        if (!StringUtils.isEmpty(startDate)) {
+            startDate += " 00:00:00.000";
+        } else {
+            startDate = "2020-01-01 00:00:00.000";
+        }
+        //もしendDateに値があったらその値 + " 23:59:59"をDaoに渡したい
+        if (!StringUtils.isEmpty(endDate)) {
+            endDate += " 23:59:59.999";
+        } else {
+            endDate = "2100-12-31 23:59:59.999";
+        }
+
+        Date start = null;
+        Date end = null;
+        try {
+            SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+            start = sdFormat.parse(startDate);
+            end = sdFormat.parse(endDate);
+
+        } catch (ParseException e) {
+            //例外が発生した場所や原因をより詳細に把握できる
+            e.printStackTrace();
+            return null;
+        }
+
+        List<Tasks> results = tasksRepository.findByLimitDateBetweenOrderByLimitDateAsc(start, end, content, status);
         List<TasksForm> tasks2 = setTasksForm(results);
         return tasks2;
     }

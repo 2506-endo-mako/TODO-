@@ -16,10 +16,10 @@
             <input type="date" name="end_date" th:value="${endDate}">
 
             <!--★ステータス-->
-            <input type="???" name="status" th:value="${status}">
+            <input type="text" name="status" th:value="${status}">
 
             <!--★タスク内容-->
-            <input type="???" name="content" th:value="${content}">
+            <input type="text" name="content" th:value="${content}">
             <textarea class="task-content" th:field="*{content}" size="10" maxlength="100" /></textarea>
             <!--タグで作成したフォームの中でテキスト入力欄やボタンなどの部品を作成する要素(input)-->
             <input type="submit" value="絞込">
