@@ -33,6 +33,8 @@ public class TasksService {
             Tasks result = results.get(i);
             tasks.setId(result.getId());
             tasks.setContent(result.getContent());
+            tasks.setStatus(result.getStatus());
+            tasks.setLimitDate(result.getLimitDate());
             tasks2.add(tasks);
         }
         return tasks2;
