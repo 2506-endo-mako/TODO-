@@ -12,13 +12,12 @@
 
 <div class="main-contents">
     <div class="date">
-       本日の日付 : 7月31日
+        本日の日付：<span th:text="${today}"></span>
     </div>
-    <div class="new-task">
-        <form>
-            <input type="submit" value="新規タスク">
-        </form>
-    </div>
+    <!--新規タスク-->
+    <a href="/new">
+        <button class="new-button" type="button">新規タスク</button>
+    </a>
     <div>
         <form th:method="get" action="./" th:object="${formModel}">
             <div class="form-area">
@@ -32,10 +31,10 @@
                 <!--★ステータス-->
                 ステータス
                 <select name="status">
-                    <option value="0">未着手</option>
-                    <option value="1">実行中</option>
-                    <option value="2">ステイ中</option>
-                    <option value="3">完了</option>
+                    <option value="0" th:selected="${status == 0}">未着手</option>
+                    <option value="1" th:selected="${status == 1}">実行中</option>
+                    <option value="2" th:selected="${status == 2}">ステイ中</option>
+                    <option value="3" th:selected="${status == 3}">完了</option>
                 </select>
 
                 <!--★タスク内容-->
@@ -55,24 +54,35 @@
         <div class="tasks-icon" th:each="content : ${contents}">
             <!--タスク内容-->
             <div class="content">
-                <pre><span th:text="${content.content}"></span></pre>
+                <span th:text="${content.content}"></span>
             </div>
             <!--ステータス-->
             <div class="status">
                 <select name="status">
-                    <option value="0">未着手</option>
-                    <option value="1">実行中</option>
-                    <option value="2">ステイ中</option>
-                    <option value="3">完了</option>
+                    <option value="0" th:selected="${status == 0}">未着手</option>
+                    <option value="1" th:selected="${status == 1}">実行中</option>
+                    <option value="2" th:selected="${status == 2}">ステイ中</option>
+                    <option value="3" th:selected="${status == 3}">完了</option>
                 </select>
             </div>
             <!--タスク期限-->
             <div class="limit">
                 <span th:text="${#dates.format(content.limitDate, 'yyyy/MM/dd')}"></span>
             </div>
+            <!--編集ボタン-->
+            <div class="edit-button">
+<!--                <form th:action="@{/edit/{id}(id=${content.id})}" >-->
+                    <input type="submit" value="編集"/>
+<!--                </form>-->
+            </div>
+            <!--削除ボタン-->
+            <div class="delete-button">
+                <form th:action="@{/delete/{id}(id=${content.id})}" th:method="delete">
+                    <input type="submit" value="削除">
+                </form>
+            </div>
         </div>
     </div>
 </div>
-
 </body>
 </html>

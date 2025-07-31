@@ -68,4 +68,31 @@ public class TasksService {
         }
         return tasks2;
     }
+    /*
+     * レコード追加
+     */
+    public void saveTasks(TasksForm reqTasks) {
+        Tasks saveTasks = setTasksEntity(reqTasks);
+        tasksRepository.save(saveTasks);
+    }
+
+    /*
+     * リクエストから取得した情報をEntityに設定
+     */
+    private Tasks setTasksEntity(TasksForm reqTasks) {
+        Tasks tasks = new Tasks();
+        tasks.setId(reqTasks.getId());
+        tasks.setContent(reqTasks.getContent());
+        tasks.setStatus(reqTasks.getStatus());
+        tasks.setLimitDate(reqTasks.getLimitDate());
+        tasks.setUpdatedDate(reqTasks.getUpdatedDate());
+        return tasks;
+    }
+    /*
+     *投稿の削除
+     */
+    public void deleteTasks(Integer id) {
+        //idを指定してdelete文を実行したい
+        tasksRepository.deleteById(id);
+    }
 }
