@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/style.css}" rel="styleSheet">
+    <title>TOP</title>
+</head>
+<body>
+<div class="header-contents">
+    <h1>ToDoリスト</h1>
+</div>
+
+<div class="main-contents">
+    <div class="date">
+       本日の日付 : 7月31日
+    </div>
+    <div class="new-task">
+        <form>
+            <input type="submit" value="新規タスク">
+        </form>
+    </div>
+    <div class="tasks">
+        <div class="Label">
+            <div class="content">タスク内容</div>
+            <div class="status">ステータス</div>
+            <div class="limit">タスク期限</div>
+        </div>
+        <div class="tasks-icon" th:each="content : ${contents}">
+            <!--タスク内容-->
+            <div class="content">
+                <pre><span th:text="${content.content}"></span></pre>
+            </div>
+            <!--ステータス-->
+            <div class="status">
+                <select name="status">
+                    <option value="0">未着手</option>
+                    <option value="1">実行中</option>
+                    <option value="2">ステイ中</option>
+                    <option value="3">完了</option>
+                </select>
+            </div>
+            <!--タスク期限-->
+            <div class="limit">
+                <span th:text="${#dates.format(content.limitDate, 'yyyy/MM/dd')}"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

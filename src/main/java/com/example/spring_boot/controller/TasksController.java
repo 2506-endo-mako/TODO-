@@ -17,7 +17,7 @@ public class TasksController {
     /*
      * TOP画面表示処理
      */
-    @GetMapping
+    @GetMapping("/")
     public ModelAndView top() {
         ModelAndView mav = new ModelAndView();
         // タスクを全件取得
