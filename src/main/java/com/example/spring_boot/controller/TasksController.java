@@ -26,7 +26,7 @@ public class TasksController {
                             @RequestParam(name = "status", required = false) String status) {
         ModelAndView mav = new ModelAndView();
         // タスクを全件取得
-        List<TasksForm> contentData = tasksService.findAllTasks(startDate,endDate,content,status);
+        List<TasksForm> contentData = tasksService.findAllTasks(startDate,endDate);
         // 画面遷移先を指定
         mav.setViewName("/top");
         // 投稿データオブジェクトを保管
