@@ -21,7 +21,7 @@ public class TasksService {
     /*
      * タスク情報取得処理
      */
-    public List<TasksForm> findAllTasks(String startDate, String endDate) {
+    public List<TasksForm> findAllTasks(String startDate, String endDate, String content, Integer status) {
         if (!StringUtils.isEmpty(startDate)) {
             startDate += " 00:00:00.000";
         } else {
@@ -47,7 +47,7 @@ public class TasksService {
             return null;
         }
 
-        List<Tasks> results = tasksRepository.findByLimitDateBetweenOrderByLimitDateAsc(start, end);
+        List<Tasks> results = tasksRepository.findByLimitDateBetweenAndContentAndStatusOrderByLimitDateAsc(start, end,content,status);
         List<TasksForm> tasks2 = setTasksForm(results);
         return tasks2;
     }
