@@ -28,9 +28,9 @@ public class Tasks {
         private Integer status;
         @Column
         private Date limitDate;
-        @Column
+        @Column(name = "created_date", insertable = false, updatable = false)
         private Date createdDate;
-        @Column
+        @Column(name = "created_date", insertable = false, updatable = false)
         private Date updatedDate;
 
 }

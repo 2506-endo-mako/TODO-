@@ -10,8 +10,8 @@
     <h1>ToDoリスト</h1>
 </div>
 <!--エラーメッセージ -->
-<div class="error-massage">
-    <li><span th:text="${errorMessages}"/></li>
+<div class="errorMessages" th:each="errorMessage : ${errorMessages}">
+    <span th:text="${errorMessage}"></span>
 </div>
 <div class="main-contents">
     <div class="date">

@@ -5,13 +5,17 @@ import com.example.spring_boot.service.TasksService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.text.ParseException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -43,11 +47,10 @@ public class TasksController {
         mav.addObject("content", content);
         mav.addObject("status", status);
         mav.addObject("date", LocalDate.now());
-        //エラー表示
-        setErrorMessage(mav);
-        return mav;
 
+        return mav;
     }
+
     /*
      * 新規タスク登録画面表示
      */
@@ -57,7 +60,6 @@ public class TasksController {
         TasksForm tasksForm = new TasksForm();
         mav.setViewName("/new");
         mav.addObject("formModel", tasksForm);
-        //エラー表示
         setErrorMessage(mav);
         return mav;
     }
@@ -66,12 +68,18 @@ public class TasksController {
      * 新規タスク登録処理
      */
     @PostMapping("/add")
-    public ModelAndView addContent(@Validated @ModelAttribute("formModel") TasksForm tasksForm, BindingResult result) {
+    public ModelAndView addContent(@Validated @ModelAttribute("formModel") TasksForm tasksForm, BindingResult result) throws ParseException {
         //バリデーション
         if (result.hasErrors()) {
-            session.setAttribute("errorMessages", "タスクを入力してください");
+            List<String> errorMessages = new ArrayList<>();
+            for (ObjectError error : result.getAllErrors()) {
+                // ここでメッセージを取得する。
+                errorMessages.add(error.getDefaultMessage());
+            }
+            session.setAttribute("errorMessages", errorMessages);
             return new ModelAndView("redirect:/new");
         }
+
         //初期値として0(未着手)を設定
         tasksForm.setStatus(0);
         tasksService.saveTasks(tasksForm);
@@ -107,6 +115,7 @@ public class TasksController {
         mav.setViewName("/edit");
         // 編集内容を保管
         mav.addObject("formModel", tasks);
+        setErrorMessage(mav);
         return mav;
     }
 
@@ -116,6 +125,16 @@ public class TasksController {
     @PutMapping("/update/{id}")
     public ModelAndView updateContent (@PathVariable Integer id,
                                        @Validated @ModelAttribute("formModel") TasksForm tasks, BindingResult result) {
+        //バリデーション
+        if (result.hasErrors()) {
+            List<String> errorMessages = new ArrayList<>();
+            for (ObjectError error : result.getAllErrors()) {
+                // ここでメッセージを取得する。
+                errorMessages.add(error.getDefaultMessage());
+            }
+            session.setAttribute("errorMessages", errorMessages);
+            return new ModelAndView("redirect:/edit/{id}");
+        }
         // UrlParameterのidを更新するentityにセット
         tasks.setId(id);
         tasksService.saveTasks(tasks);
