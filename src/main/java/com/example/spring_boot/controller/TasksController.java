@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.ParseException;
@@ -34,7 +33,7 @@ public class TasksController {
                             )throws ParseException {
         ModelAndView mav = new ModelAndView();
         // タスクを全件取得
-        List<TasksForm> contentData = tasksService.findAllTasks();
+        List<TasksForm> contentData = tasksService.findAllTasks(startDate, endDate, content, status);
         // 画面遷移先を指定
         mav.setViewName("/top");
         // 投稿データオブジェクトを保管
