@@ -21,37 +21,51 @@ public class TasksService {
     /*
      * タスク情報取得処理
      */
-    public List<TasksForm> findAllTasks() {
-//        if (!StringUtils.isEmpty(startDate)) {
-//            startDate += " 00:00:00.000";
-//        } else {
-//            startDate = "2020-01-01 00:00:00.000";
-//        }
-//        //もしendDateに値があったらその値 + " 23:59:59"をDaoに渡したい
-//        if (!StringUtils.isEmpty(endDate)) {
-//            endDate += " 23:59:59.999";
-//        } else {
-//            endDate = "2100-12-31 23:59:59.999";
-//        }
-//
-//        Date start = null;
-//        Date end = null;
-//        try {
-//            SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-//            start = sdFormat.parse(startDate);
-//            end = sdFormat.parse(endDate);
-//
-//        } catch (ParseException e) {
-//            //例外が発生した場所や原因をより詳細に把握できる
-//            e.printStackTrace();
-//            return null;
-//        }
+    public List<TasksForm> findAllTasks(String startDate, String endDate, String content, Integer status) {
+        if (!StringUtils.isEmpty(startDate)) {
+            startDate += " 00:00:00.000";
+        } else {
+            startDate = "2020-01-01 00:00:00.000";
+        }
+        //もしendDateに値があったらその値 + " 23:59:59"をDaoに渡したい
+        if (!StringUtils.isEmpty(endDate)) {
+            endDate += " 23:59:59.999";
+        } else {
+            endDate = "2100-12-31 23:59:59.999";
+        }
 
-        List<Tasks> results = tasksRepository.findAllBy();
+        Date start = null;
+        Date end = null;
+        try {
+            SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+            start = sdFormat.parse(startDate);
+            end = sdFormat.parse(endDate);
+
+        } catch (ParseException e) {
+            //例外が発生した場所や原因をより詳細に把握できる
+            e.printStackTrace();
+            return null;
+        }
+        //宣言する
+        List<Tasks> results = null;
+//分岐させたい
+        //②日付とステータス③ステータスのみ④日付と内容⑥内容とステータス⑦日付と内容とステータス
+        //日付のみ（初期表示　→　全取得したい）
+        if(StringUtils.isEmpty(content) && status == null) {
+            results = tasksRepository.findAll();
+        }
+        //②内容のみ無い　→　日付とステータスはある
+        if(StringUtils.isEmpty(content) && status != null){
+                results = tasksRepository.findByLimitDateBetweenAndStatusOrderByLimitDateAsc(start, end, status);
+          }
+        //内容と日付
+        if(!StringUtils.isEmpty(content)) {
+            results = tasksRepository.findByLimitDateBetweenAndContentAndStatusOrderByLimitDateAsc(start, end, content, status);
+        }
+
         List<TasksForm> tasks2 = setTasksForm(results);
         return tasks2;
     }
-
     /*
      * DBから取得したデータをFormに設定
      */
@@ -69,6 +83,13 @@ public class TasksService {
         }
         return tasks2;
     }
+//    //status更新
+//    public void saveTasks(TasksForm reqTasks) {
+//        Tasks saveTasks = setTasksEntity(reqTasks);
+//        tasksRepository.save(saveTasks);
+//    }
+
+
     /*
      * レコード追加
      */
@@ -86,6 +107,7 @@ public class TasksService {
         tasks.setContent(reqTasks.getContent());
         tasks.setStatus(reqTasks.getStatus());
         tasks.setLimitDate(reqTasks.getLimitDate());
+        tasks.setCreatedDate(reqTasks.getCreatedDate());
         tasks.setUpdatedDate(reqTasks.getUpdatedDate());
         return tasks;
     }
