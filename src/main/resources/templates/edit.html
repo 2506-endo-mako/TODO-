@@ -3,29 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <link th:href="@{/css/style.css}" rel="styleSheet">
-    <title>新規タスク</title>
+    <title>タスク編集</title>
 </head>
 <body>
 <div class="header-contents">
-    <h2>新規タスク</h2>
-    <!--エラーメッセージ -->
-    <div class="error-massage">
+    <h2>タスク編集</h2>
+</div>
+<!--エラーメッセージ -->
+<div class="error-massage">
+    <ul>
         <li><span th:text="${errorMessages}"/></li>
-    </div>
-    <form method="post" action="/add" th:object="${formModel}">
+    </ul>
+</div>
+<div class="main-contents">
+    <form th:action="@{/update/{id}(id=${formModel.id})}" th:object="${formModel}" th:method="put">
         <div class="form-area">
             <label>タスク内容</label>
-            <textarea class="content-box" th:field="*{content}" size="200" maxlength="200"/></textarea>
+            <textarea class="edit-box" name="content" th:field="*{content}" size="20" maxlength="200" /></textarea><br/>
             <label>タスク期限</label>
             <input type="date" th:name="limitDate" th:value="*{limitDate}"/>
-            <input type="submit" value="追加"/>
+            <input type="submit" value="更新"/>
         </div>
     </form>
 </div>
-
 <div class="footer-contents">
     <form action="/">
-        <input type="submit" value="戻る"/>
+        <input type="submit" value="戻る" />
     </form>
 </div>
 </body>

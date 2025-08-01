@@ -9,10 +9,13 @@
 <div class="header-contents">
     <h1>ToDoリスト</h1>
 </div>
-
+<!--エラーメッセージ -->
+<div class="error-massage">
+    <li><span th:text="${errorMessages}"/></li>
+</div>
 <div class="main-contents">
     <div class="date">
-        本日の日付：<span th:text="${today}"></span>
+        本日の日付：<span th:text="${date}"></span>
     </div>
     <!--新規タスク-->
     <a href="/new">
@@ -31,10 +34,10 @@
                 <!--★ステータス-->
                 ステータス
                 <select name="status">
-                    <option value="0" th:selected="${status == 0}">未着手</option>
-                    <option value="1" th:selected="${status == 1}">実行中</option>
-                    <option value="2" th:selected="${status == 2}">ステイ中</option>
-                    <option value="3" th:selected="${status == 3}">完了</option>
+                    <option value="0">未着手</option>
+                    <option value="1">実行中</option>
+                    <option value="2">ステイ中</option>
+                    <option value="3">完了</option>
                 </select>
 
                 <!--★タスク内容-->
@@ -59,10 +62,10 @@
             <!--ステータス-->
             <div class="status">
                 <select name="status">
-                    <option value="0" th:selected="${status == 0}">未着手</option>
-                    <option value="1" th:selected="${status == 1}">実行中</option>
-                    <option value="2" th:selected="${status == 2}">ステイ中</option>
-                    <option value="3" th:selected="${status == 3}">完了</option>
+                    <option value="0" th:selected="${content.status == 0}">未着手</option>
+                    <option value="1" th:selected="${content.status == 1}">実行中</option>
+                    <option value="2" th:selected="${content.status == 2}">ステイ中</option>
+                    <option value="3" th:selected="${content.status == 3}">完了</option>
                 </select>
             </div>
             <!--タスク期限-->
@@ -71,9 +74,9 @@
             </div>
             <!--編集ボタン-->
             <div class="edit-button">
-<!--                <form th:action="@{/edit/{id}(id=${content.id})}" >-->
+                <form th:action="@{/edit/{id}(id=${content.id})}">
                     <input type="submit" value="編集"/>
-<!--                </form>-->
+                </form>
             </div>
             <!--削除ボタン-->
             <div class="delete-button">

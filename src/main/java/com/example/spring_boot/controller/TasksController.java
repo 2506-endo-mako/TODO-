@@ -33,7 +33,7 @@ public class TasksController {
                             )throws ParseException {
         ModelAndView mav = new ModelAndView();
         // タスクを全件取得
-        List<TasksForm> contentData = tasksService.findAllTasks(startDate, endDate, content, status);
+        List<TasksForm> contentData = tasksService.findAllTasks();
         // 画面遷移先を指定
         mav.setViewName("/top");
         // 投稿データオブジェクトを保管
@@ -42,10 +42,11 @@ public class TasksController {
         mav.addObject("endDate", endDate);
         mav.addObject("content", content);
         mav.addObject("status", status);
-        mav.addObject("today", LocalDate.now());
+        mav.addObject("date", LocalDate.now());
         //エラー表示
         setErrorMessage(mav);
         return mav;
+
     }
     /*
      * 新規タスク登録画面表示
@@ -74,6 +75,32 @@ public class TasksController {
         //初期値として0(未着手)を設定
         tasksForm.setStatus(0);
         tasksService.saveTasks(tasksForm);
+        return new ModelAndView("redirect:/");
+    }
+
+    /*
+     *投稿の編集画面表示
+     */
+    @GetMapping("/edit/{id}")
+    public ModelAndView editContent(@PathVariable Integer id) {
+        ModelAndView mav = new ModelAndView();
+        //編集する投稿を取得
+        TasksForm tasks = tasksService.editTasks(id);
+        mav.setViewName("/edit");
+        // 編集内容を保管
+        mav.addObject("formModel", tasks);
+        return mav;
+    }
+
+    /*
+     * 編集処理
+     */
+    @PutMapping("/update/{id}")
+    public ModelAndView updateContent (@PathVariable Integer id,
+                                       @Validated @ModelAttribute("formModel") TasksForm tasks, BindingResult result) {
+        // UrlParameterのidを更新するentityにセット
+        tasks.setId(id);
+        tasksService.saveTasks(tasks);
         return new ModelAndView("redirect:/");
     }
 
