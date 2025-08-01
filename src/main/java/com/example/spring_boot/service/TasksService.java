@@ -46,8 +46,23 @@ public class TasksService {
             e.printStackTrace();
             return null;
         }
+        //宣言する
+        List<Tasks> results = null;
+//分岐させたい
+        //②日付とステータス③ステータスのみ④日付と内容⑥内容とステータス⑦日付と内容とステータス
+        //日付のみ（初期表示　→　全取得したい）
+        if(StringUtils.isEmpty(content) && status == null) {
+            results = tasksRepository.findAll();
+        }
+        //②内容のみ無い　→　日付とステータスはある
+        if(StringUtils.isEmpty(content) && status != null){
+                results = tasksRepository.findByLimitDateBetweenAndStatusOrderByLimitDateAsc(start, end, status);
+          }
+        //内容と日付
+        if(!StringUtils.isEmpty(content)) {
+            results = tasksRepository.findByLimitDateBetweenAndContentAndStatusOrderByLimitDateAsc(start, end, content, status);
+        }
 
-        List<Tasks> results = tasksRepository.findByLimitDateBetweenAndContentAndStatusOrderByLimitDateAsc(start, end,content,status);
         List<TasksForm> tasks2 = setTasksForm(results);
         return tasks2;
     }
@@ -68,4 +83,22 @@ public class TasksService {
         }
         return tasks2;
     }
+//    //status更新
+//    public void saveTasks(TasksForm reqTasks) {
+//        Tasks saveTasks = setTasksEntity(reqTasks);
+//        tasksRepository.save(saveTasks);
+//    }
+
+    /*
+     * リクエストから取得した情報をEntityに設定
+     */
+    private Tasks setTasksEntity(TasksForm reqTasks) {
+        Tasks tasks = new Tasks();
+        tasks.setId(reqTasks.getId());
+        tasks.setContent(reqTasks.getContent());
+        tasks.setCreatedDate(reqTasks.getCreatedDate());
+        tasks.setUpdatedDate(reqTasks.getUpdatedDate());
+        return tasks;
+    }
+
 }

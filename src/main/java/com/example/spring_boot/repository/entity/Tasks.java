@@ -21,10 +21,11 @@ public class Tasks {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private int id;
 
+
         @Column
         private String content;
         @Column
-        private int status;
+        private Integer status;
         @Column
         private Date limitDate;
         @Column
