@@ -83,33 +83,80 @@ public class TasksService {
         }
         return tasks2;
     }
-//    //status更新
-//    public void saveTasks(TasksForm reqTasks) {
-//        Tasks saveTasks = setTasksEntity(reqTasks);
-//        tasksRepository.save(saveTasks);
-//    }
 
 
     /*
      * レコード追加
      */
     public void saveTasks(TasksForm reqTasks) {
-        Tasks saveTasks = setTasksEntity(reqTasks);
+       //select文流す　WHERE句はkEYのidのみ
+        Tasks saveTasks = new Tasks();
+        saveTasks = (tasksRepository.findById(reqTasks.getId()).orElse(null));
+        saveTasks = updateSetTasksEntity(reqTasks,saveTasks);
         tasksRepository.save(saveTasks);
     }
+
 
     /*
      * リクエストから取得した情報をEntityに設定
      */
+
+    private Tasks updateSetTasksEntity(TasksForm reqTasks,Tasks saveTasks) {
+        //現在日時を取得
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+        //変数endにsdfからformatメソッドで引数dateを渡したものを代入して
+        //現在日時をendDateに入れている
+        String strDate = sdf.format(date);
+        Date nowDate;
+        try {
+            nowDate = sdf.parse(strDate);
+        } catch (ParseException e) {
+            //例外が発生した場所や原因をより詳細に把握できる
+            e.printStackTrace();
+            return null;
+        }
+
+        Tasks tasks = new Tasks();
+        tasks.setId(saveTasks.getId());
+        tasks.setContent(saveTasks.getContent());
+        tasks.setStatus(reqTasks.getStatus());
+        tasks.setLimitDate(saveTasks.getLimitDate());
+        tasks.setCreatedDate(saveTasks.getCreatedDate());
+        tasks.setUpdatedDate(nowDate);
+        return tasks;
+
+
+    }
+
     private Tasks setTasksEntity(TasksForm reqTasks) {
+        //現在日時を取得
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+        //変数endにsdfからformatメソッドで引数dateを渡したものを代入して
+        //現在日時をendDateに入れている
+        String strDate = sdf.format(date);
+        Date nowDate;
+        try {
+            nowDate = sdf.parse(strDate);
+        } catch (ParseException e) {
+            //例外が発生した場所や原因をより詳細に把握できる
+            e.printStackTrace();
+            return null;
+        }
+
         Tasks tasks = new Tasks();
         tasks.setId(reqTasks.getId());
         tasks.setContent(reqTasks.getContent());
         tasks.setStatus(reqTasks.getStatus());
         tasks.setLimitDate(reqTasks.getLimitDate());
         tasks.setCreatedDate(reqTasks.getCreatedDate());
-        tasks.setUpdatedDate(reqTasks.getUpdatedDate());
+        tasks.setUpdatedDate(nowDate);
         return tasks;
+
+
     }
     /*
      *投稿の削除

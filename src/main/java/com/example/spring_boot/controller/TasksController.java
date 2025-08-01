@@ -89,18 +89,19 @@ public class TasksController {
 //    /*
 //     *ステータス変更処理
 //     */
-//    @PutMapping("/update/status")
-//    //@PathVariable　→　URLのパスの一部を変数として受け取るためのアノテーション
-//    public ModelAndView updateStatus(@RequestParam(name = "status", required = false) Integer status,@RequestParam String content, @ModelAttribute("formModel") TasksForm tasks) {
-//        // UrlParameterのidを更新するentityにセット
-//        tasks.setContent(content);
-//        tasks.setStatus(status);
-//
-//        // 編集した投稿を更新
-//        tasksService.saveTasks(tasks);
-//        // rootへリダイレクト
-//        return new ModelAndView("redirect:/");
-//    }
+    @PutMapping("/update/status")
+    //@PathVariable　→　URLのパスの一部を変数として受け取るためのアノテーション
+    public ModelAndView updateStatus(@RequestParam Integer id,
+                                     @RequestParam(name = "status", required = false) Integer status,
+                                     @ModelAttribute("formModel") TasksForm tasksForm) {
+
+        tasksForm.setStatus(status);
+        tasksForm.setId(id);
+        // 編集した投稿を更新
+        tasksService.saveTasks(tasksForm);
+        // rootへリダイレクト
+        return new ModelAndView("redirect:/");
+    }
 
 
 

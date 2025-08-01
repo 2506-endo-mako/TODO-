@@ -22,15 +22,15 @@ public class Tasks {
         private int id;
 
 
-        @Column
+        @Column(name = "content",insertable = false, updatable = true)
         private String content;
         @Column
         private Integer status;
-        @Column
+        @Column(name = "limit_date",insertable = false, updatable = false)
         private Date limitDate;
-        @Column(name = "created_date", insertable = false, updatable = false)
+        @Column(name = "created_date",insertable = false, updatable = false)
         private Date createdDate;
-        @Column(name = "created_date", insertable = false, updatable = false)
+        @Column(name = "updated_date",insertable = false, updatable = true)
         private Date updatedDate;
 
 }

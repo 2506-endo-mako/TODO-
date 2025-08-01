@@ -11,7 +11,7 @@
 </div>
 <!--エラーメッセージ -->
 <div class="errorMessages" th:each="errorMessage : ${errorMessages}">
-    <span th:text="${errorMessage}"></span>
+    <li><span th:text="${errorMessage}"/></li>
 </div>
 <div class="main-contents">
     <div class="date">
@@ -60,16 +60,18 @@
                 <span th:text="${content.content}"></span>
             </div>
             <!--ステータス-->
-<!--            <form th:action="@{/update/status}" th:object="${formModel}" th:method="put">-->
-            <div class="status">
-                <select name="status">
-                    <option value="0" th:selected="${content.status == 0}"> 未着手</option>
+            <form th:action="@{/update/status}" th:object="${formModel}" th:method="put">
+                <div class="status">
+                    <select name="status">
+                        <option value="0" th:selected="${content.status == 0}"> 未着手</option>
                     <option value="1" th:selected="${content.status == 1}"> 実行中</option>
                     <option value="2" th:selected="${content.status == 2}"> ステイ中</option>
                     <option value="3" th:selected="${content.status == 3}"> 完了</option>
                 </select>
+                <input type="hidden" name="id" th:value="${content.id}" />
+                <input type="submit" value="変更"/>
             </div>
-<!--            </form>-->
+            </form>
             <!--タスク期限-->
             <div class="limit">
                 <span th:text="${#dates.format(content.limitDate, 'yyyy/MM/dd')}"></span>
