@@ -89,6 +89,15 @@ public class TasksService {
 //        tasksRepository.save(saveTasks);
 //    }
 
+
+    /*
+     * レコード追加
+     */
+    public void saveTasks(TasksForm reqTasks) {
+        Tasks saveTasks = setTasksEntity(reqTasks);
+        tasksRepository.save(saveTasks);
+    }
+
     /*
      * リクエストから取得した情報をEntityに設定
      */
@@ -96,9 +105,17 @@ public class TasksService {
         Tasks tasks = new Tasks();
         tasks.setId(reqTasks.getId());
         tasks.setContent(reqTasks.getContent());
+        tasks.setStatus(reqTasks.getStatus());
+        tasks.setLimitDate(reqTasks.getLimitDate());
         tasks.setCreatedDate(reqTasks.getCreatedDate());
         tasks.setUpdatedDate(reqTasks.getUpdatedDate());
         return tasks;
     }
-
+    /*
+     *投稿の削除
+     */
+    public void deleteTasks(Integer id) {
+        //idを指定してdelete文を実行したい
+        tasksRepository.deleteById(id);
+    }
 }
