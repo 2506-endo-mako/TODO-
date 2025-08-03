@@ -1,6 +1,7 @@
 package com.example.spring_boot.controller.form;
 
 import jakarta.persistence.Column;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -25,6 +26,7 @@ public class TasksForm {
 
     @NotNull(message = "期限を設定してください")
     @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @FutureOrPresent(message = "無効な日付です")
     private Date limitDate;
 
     private Date createdDate;

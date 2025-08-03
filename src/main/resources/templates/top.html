@@ -13,10 +13,9 @@
 <div class="errorMessages" th:each="errorMessage : ${errorMessages}">
     <li><span th:text="${errorMessage}"/></li>
 </div>
-
 <div class="main-contents">
     <div class="date">
-        本日の日付：<span th:text="${date}"></span>
+        本日の日付：<span th:text="${today}"></span>
     </div>
     <!--新規タスク-->
     <a href="/new">
@@ -49,18 +48,19 @@
             </div>
         </form>
     </div>
-    <div class="tasks">
-        <div class="Label">
-            <div class="content">タスク内容</div>
-            <div class="status">ステータス</div>
-            <div class="limit">タスク期限</div>
-        </div>
-        <div class="tasks-icon" th:each="content : ${contents}">
+    <table class="tasks">
+        <tr class="title">
+            <th class="content">タスク内容</th>
+            <th class="status">ステータス</th>
+            <th class="limit">タスク期限</th>
+        </tr>
+        <tr class="tasks-icon" th:each="content : ${contents}">
             <!--タスク内容-->
-            <div class="content">
+            <td class="content">
                 <span th:text="${content.content}"></span>
-            </div>
+            </td>
             <!--ステータス-->
+            <td>
             <form th:action="@{/update/status}" th:object="${formModel}" th:method="put">
                 <div class="status">
                     <select name="status">
@@ -74,23 +74,32 @@
 
                 </div>
             </form>
-            <!--タスク期限-->
-            <div class="limit">
-                <span th:text="${#dates.format(content.limitDate, 'yyyy/MM/dd')}"></span>
-            </div>
+            </td>
+            <!--タスク期限 （今日以前・・・赤　今日より後・・・黄色）-->
+            <td class="limit">
+                <div class="limit-before" th:if="${today >= #dates.format(content.limitDate, 'yyyy/MM/dd')}">
+                    <span th:text="${#dates.format(content.limitDate, 'yyyy/MM/dd')}"></span>
+                </div>
+                <div class="limit-after" th:if="${today < #dates.format(content.limitDate, 'yyyy/MM/dd')}">
+                    <span th:text="${#dates.format(content.limitDate, 'yyyy/MM/dd')}"></span>
+                </div>
+            </td>
             <!--編集ボタン-->
-            <div class="edit-button">
+            <td class="edit-button">
                 <form th:action="@{/edit/{id}(id=${content.id})}">
                     <input type="submit" value="編集"/>
                 </form>
-            </div>
+            </td>
             <!--削除ボタン-->
-            <div class="delete-button">
+            <td class="delete-button">
                 <form th:action="@{/delete/{id}(id=${content.id})}" th:method="delete">
                    <div>
                     <input id="btn" type="submit" value="削除">
                    </div>
                 </form>
+            </td>
+        </tr>
+    </table>
             </div>
         </div>
     </div>
