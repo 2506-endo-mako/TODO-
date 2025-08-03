@@ -13,10 +13,16 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+
+
 
 @Controller
 public class TasksController {
@@ -65,6 +71,21 @@ public class TasksController {
     }
 
     /*
+     *投稿の編集画面表示
+     */
+    @GetMapping("/edit/{id}")
+    public ModelAndView editContent(@PathVariable Integer id) {
+        ModelAndView mav = new ModelAndView();
+        //編集する投稿を取得
+        TasksForm tasks = tasksService.editTasks(id);
+        mav.setViewName("/edit");
+        // 編集内容を保管
+        mav.addObject("formModel", tasks);
+        setErrorMessage(mav);
+        return mav;
+    }
+
+    /*
      * 新規タスク登録処理
      */
     @PostMapping("/add")
@@ -86,9 +107,9 @@ public class TasksController {
         return new ModelAndView("redirect:/");
     }
 
-//    /*
-//     *ステータス変更処理
-//     */
+    /*
+     *ステータス変更処理
+     */
     @PutMapping("/update/status")
     //@PathVariable　→　URLのパスの一部を変数として受け取るためのアノテーション
     public ModelAndView updateStatus(@RequestParam Integer id,
@@ -101,23 +122,6 @@ public class TasksController {
         tasksService.updateTasks(tasksForm);
         // rootへリダイレクト
         return new ModelAndView("redirect:/");
-    }
-
-
-
-    /*
-     *投稿の編集画面表示
-     */
-    @GetMapping("/edit/{id}")
-    public ModelAndView editContent(@PathVariable Integer id) {
-        ModelAndView mav = new ModelAndView();
-        //編集する投稿を取得
-        TasksForm tasks = tasksService.editTasks(id);
-        mav.setViewName("/edit");
-        // 編集内容を保管
-        mav.addObject("formModel", tasks);
-        setErrorMessage(mav);
-        return mav;
     }
 
     /*

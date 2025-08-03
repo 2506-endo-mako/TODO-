@@ -13,6 +13,7 @@
 <div class="errorMessages" th:each="errorMessage : ${errorMessages}">
     <li><span th:text="${errorMessage}"/></li>
 </div>
+
 <div class="main-contents">
     <div class="date">
         本日の日付：<span th:text="${date}"></span>
@@ -69,8 +70,9 @@
                     <option value="3" th:selected="${content.status == 3}"> 完了</option>
                 </select>
                 <input type="hidden" name="id" th:value="${content.id}" />
-                <input type="submit" value="変更"/>
-            </div>
+                    <input id="status-btn" type="submit" value="変更"/>
+
+                </div>
             </form>
             <!--タスク期限-->
             <div class="limit">
@@ -85,11 +87,41 @@
             <!--削除ボタン-->
             <div class="delete-button">
                 <form th:action="@{/delete/{id}(id=${content.id})}" th:method="delete">
-                    <input type="submit" value="削除">
+                   <div>
+                    <input id="btn" type="submit" value="削除">
+                   </div>
                 </form>
             </div>
         </div>
     </div>
+</div>
+<div>
+    <script>
+        var btn = document.getElementById("status-btn");
+        btn.addEventListener("click", function() {
+            var result = window.confirm("変更してもよろしいですか？");
+            if( result ) {
+                alert("OKがクリックされました");
+            } else {
+                event.preventDefault();
+                alert("キャンセルがクリックされました");
+            }
+        });
+    </script>
+</div>
+<div>
+    <script>
+        var btn = document.getElementById("btn");
+        btn.addEventListener("click", function() {
+            var result = window.confirm("削除してもよろしいですか？");
+            if( result ) {
+                alert("OKがクリックされました");
+            } else {
+                event.preventDefault();
+                alert("キャンセルがクリックされました");
+            }
+        });
+    </script>
 </div>
 </body>
 </html>
