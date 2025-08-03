@@ -17,7 +17,7 @@
     <form th:action="@{/update/{id}(id=${formModel.id})}" th:object="${formModel}" th:method="put">
         <div class="form-area">
             <label>タスク内容</label>
-            <textarea class="edit-box" name="content" th:field="*{content}" size="20" maxlength="200" /></textarea><br/>
+            <textarea class="content-box" name="content" th:field="*{content}" size="20" maxlength="200" /></textarea><br/>
             <label>タスク期限</label>
             <input type="date" th:field="*{limitDate}"/>
             <input type="submit" value="更新"/>
