@@ -101,7 +101,7 @@ public class TasksController {
         tasksForm.setStatus(status);
         tasksForm.setId(id);
         // 編集した投稿を更新
-        tasksService.saveTasks(tasksForm);
+        tasksService.updateTasks(tasksForm);
         // rootへリダイレクト
         return new ModelAndView("redirect:/");
     }
@@ -141,7 +141,7 @@ public class TasksController {
         }
         // UrlParameterのidを更新するentityにセット
         tasks.setId(id);
-        tasksService.saveTasks(tasks);
+        tasksService.editTasks(tasks);
         return new ModelAndView("redirect:/");
     }
 

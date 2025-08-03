@@ -84,18 +84,31 @@ public class TasksService {
         return tasks2;
     }
 
-
+    /*
+     * レコード編集
+     */
+    public void editTasks(TasksForm reqTasks) {
+        Tasks saveTasks = setTasksEntity(reqTasks);
+        tasksRepository.save(saveTasks);
+    }
     /*
      * レコード追加
      */
     public void saveTasks(TasksForm reqTasks) {
-       //select文流す　WHERE句はkEYのidのみ
-        Tasks saveTasks = new Tasks();
-        saveTasks = (tasksRepository.findById(reqTasks.getId()).orElse(null));
-        saveTasks = updateSetTasksEntity(reqTasks,saveTasks);
+        Tasks saveTasks = setTasksEntity(reqTasks);
         tasksRepository.save(saveTasks);
     }
 
+    /*
+     * ステータス更新＋追加
+     */
+    public void updateTasks(TasksForm reqTasks) {
+        //select文流す　WHERE句はkEYのidのみ
+            Tasks saveTasks = new Tasks();
+            saveTasks = (tasksRepository.findById(reqTasks.getId()).orElse(null));
+            saveTasks = updateSetTasksEntity(reqTasks, saveTasks);
+            tasksRepository.save(saveTasks);
+    }
 
     /*
      * リクエストから取得した情報をEntityに設定

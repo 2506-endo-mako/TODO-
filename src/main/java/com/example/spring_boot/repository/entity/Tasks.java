@@ -7,6 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -22,14 +23,19 @@ public class Tasks {
         private int id;
 
 
-        @Column(name = "content",insertable = false, updatable = true)
+        @Column(name = "content",insertable = true, updatable = true)
         private String content;
+
         @Column
         private Integer status;
-        @Column(name = "limit_date",insertable = false, updatable = false)
+
+        @Column(name = "limit_date",insertable = true, updatable = false)
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
         private Date limitDate;
+
         @Column(name = "created_date",insertable = false, updatable = false)
         private Date createdDate;
+
         @Column(name = "updated_date",insertable = false, updatable = true)
         private Date updatedDate;
 
