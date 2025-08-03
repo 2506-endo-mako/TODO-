@@ -64,17 +64,19 @@
                 <div class="status">
                     <select name="status">
                         <option value="0" th:selected="${content.status == 0}"> 未着手</option>
-                    <option value="1" th:selected="${content.status == 1}"> 実行中</option>
-                    <option value="2" th:selected="${content.status == 2}"> ステイ中</option>
-                    <option value="3" th:selected="${content.status == 3}"> 完了</option>
-                </select>
-                <input type="hidden" name="id" th:value="${content.id}" />
-                <input type="submit" value="変更"/>
-            </div>
+                        <option value="1" th:selected="${content.status == 1}"> 実行中</option>
+                        <option value="2" th:selected="${content.status == 2}"> ステイ中</option>
+                        <option value="3" th:selected="${content.status == 3}"> 完了</option>
+                    </select>
+                    <input type="hidden" name="id" th:value="${content.id}"/>
+                    <input type="submit" value="変更"/>
+                </div>
             </form>
-            <!--タスク期限-->
-            <div class="limit">
-                <span th:text="${#dates.format(content.limitDate, 'yyyy/MM/dd')}"></span>
+            <div class="limit-before" th:if="${today ge #dates.format(content.limitDate, 'yyyy-MM-dd')}">
+                <p th:text="${#strings.substring(content.limitDate, 0, 11)}"></p>
+            </div>
+            <div class="limit-after" th:if="${today lt #dates.format(content.limitDate, 'yyyy-MM-dd')}">
+                <p th:text="${#strings.substring(content.limitDate, 0, 11)}"></p>
             </div>
             <!--編集ボタン-->
             <div class="edit-button">
