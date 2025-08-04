@@ -57,7 +57,7 @@
         <tr class="tasks-icon" th:each="content : ${contents}">
             <!--タスク内容-->
             <td class="content">
-                <span th:text="${content.content}"></span>
+                <pre><span th:text="${content.content}"></span></pre>
             </td>
             <!--ステータス-->
             <td>
@@ -70,7 +70,7 @@
                             <option value="4" th:selected="${content.status == 4}"> 完了</option>
                         </select>
                         <input type="hidden" name="id" th:value="${content.id}"/>
-                        <input id="status-btn" type="submit" value="変更"/>
+                        <input class="confirm-action-status-btn" type="submit" value="変更"/>
 
                     </div>
                 </form>
@@ -94,14 +94,13 @@
             <td class="delete-button">
                 <form th:action="@{/delete/{id}(id=${content.id})}" th:method="delete">
                     <div>
-                        <input id="btn" type="submit" value="削除">
+                        <input class="confirm-action-btn" type="submit" value="削除">
                     </div>
                 </form>
             </td>
         </tr>
     </table>
 </div>
-
 <div>
     <script>
         //★ステータス変更ボタンへのダイアログ機能→クラス名とconfirmStatusButtonsに変更したらOK
