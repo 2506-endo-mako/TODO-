@@ -6,131 +6,144 @@
     <title>TOP</title>
 </head>
 <body>
-<div class="header-contents">
-    <h1>ToDoリスト</h1>
-</div>
-<!--エラーメッセージ -->
-<div class="errorMessages" th:each="errorMessage : ${errorMessages}">
-    <li><span th:text="${errorMessage}"/></li>
-</div>
-<div class="main-contents">
-    <div class="date">
-        本日の日付：<span th:text="${today}"></span>
+    <div class="header-contents">
+        <h1>ToDoリスト</h1>
     </div>
-    <!--新規タスク-->
-    <a href="/new">
-        <button class="new-button" type="button">新規タスク</button>
-    </a>
-    <div>
-        <form th:method="get" action="./" th:object="${formModel}">
-            <div class="form-area">
-                <!--フォームの要素の見出しを表すタグ(label)-->
-                期限
-                <!-- nameがControllerに渡したい情報　valueが初期表示させたい情報 -->
-                <input type="date" name="start_date" th:value="${startDate}">
-                ～
-                <input type="date" name="end_date" th:value="${endDate}">
-
-                <!--★ステータス-->
-                ステータス
-                <select name="status">
-                    <option value="0" th:selected="${status == 0}">未着手</option>
-                    <option value="1" th:selected="${status == 1}">実行中</option>
-                    <option value="2" th:selected="${status == 2}">ステイ中</option>
-                    <option value="3" th:selected="${status == 3}">完了</option>
-                </select>
-
-                <!--★タスク内容-->
-                タスク内容
-                <input type="text" name="content" th:value="${content}">
-                <!--タグで作成したフォームの中でテキスト入力欄やボタンなどの部品を作成する要素(input)-->
-                <input type="submit" value="絞込">
-            </div>
-        </form>
+    <!--エラーメッセージ -->
+    <div class="errorMessages" th:each="errorMessage : ${errorMessages}">
+        <li><span th:text="${errorMessage}"/></li>
     </div>
-    <table class="tasks">
-        <tr class="title">
-            <th class="content">タスク内容</th>
-            <th class="status">ステータス</th>
-            <th class="limit">タスク期限</th>
-        </tr>
-        <tr class="tasks-icon" th:each="content : ${contents}">
-            <!--タスク内容-->
-            <td class="content">
-                <span th:text="${content.content}"></span>
-            </td>
-            <!--ステータス-->
-            <td>
-            <form th:action="@{/update/status}" th:object="${formModel}" th:method="put">
-                <div class="status">
+    <div class="main-contents">
+        <div class="date">
+            本日の日付：<span th:text="${today}"></span>
+        </div>
+        <!--新規タスク-->
+        <a href="/new">
+            <button class="new-button" type="button">新規タスク</button>
+        </a>
+        <div>
+            <form th:method="get" action="./" th:object="${formModel}">
+                <div class="form-area">
+                    <!--フォームの要素の見出しを表すタグ(label)-->
+                    期限
+                    <!-- nameがControllerに渡したい情報　valueが初期表示させたい情報 -->
+                    <input type="date" name="start_date" th:value="${startDate}">
+                    ～
+                    <input type="date" name="end_date" th:value="${endDate}">
+
+                    <!--★ステータス-->
+                    ステータス
                     <select name="status">
-                        <option value="0" th:selected="${content.status == 0}"> 未着手</option>
-                    <option value="1" th:selected="${content.status == 1}"> 実行中</option>
-                    <option value="2" th:selected="${content.status == 2}"> ステイ中</option>
-                    <option value="3" th:selected="${content.status == 3}"> 完了</option>
-                </select>
-                <input type="hidden" name="id" th:value="${content.id}" />
-                    <input id="status-btn" type="submit" value="変更"/>
+                        <option value="0" th:selected="${status == 0}">未着手</option>
+                        <option value="1" th:selected="${status == 1}">実行中</option>
+                        <option value="2" th:selected="${status == 2}">ステイ中</option>
+                        <option value="3" th:selected="${status == 3}">完了</option>
+                    </select>
 
+                    <!--★タスク内容-->
+                    タスク内容
+                    <input type="text" name="content" th:value="${content}">
+                    <!--タグで作成したフォームの中でテキスト入力欄やボタンなどの部品を作成する要素(input)-->
+                    <input type="submit" value="絞込">
                 </div>
             </form>
-            </td>
-            <!--タスク期限 （今日以前・・・赤　今日より後・・・黄色）-->
-            <td class="limit">
-                <div class="limit-before" th:if="${today >= #dates.format(content.limitDate, 'yyyy/MM/dd')}">
-                    <span th:text="${#dates.format(content.limitDate, 'yyyy/MM/dd')}"></span>
-                </div>
-                <div class="limit-after" th:if="${today < #dates.format(content.limitDate, 'yyyy/MM/dd')}">
-                    <span th:text="${#dates.format(content.limitDate, 'yyyy/MM/dd')}"></span>
-                </div>
-            </td>
-            <!--編集ボタン-->
-            <td class="edit-button">
-                <form th:action="@{/edit/{id}(id=${content.id})}">
-                    <input type="submit" value="編集"/>
-                </form>
-            </td>
-            <!--削除ボタン-->
-            <td class="delete-button">
-                <form th:action="@{/delete/{id}(id=${content.id})}" th:method="delete">
-                   <div>
-                    <input id="btn" type="submit" value="削除">
-                   </div>
-                </form>
-            </td>
-        </tr>
-    </table>
-            </div>
         </div>
+        <table class="tasks">
+            <tr class="title">
+                <th class="content">タスク内容</th>
+                <th class="status">ステータス</th>
+                <th class="limit">タスク期限</th>
+            </tr>
+            <tr class="tasks-icon" th:each="content : ${contents}">
+                <!--タスク内容-->
+                <td class="content">
+                    <span th:text="${content.content}"></span>
+                </td>
+                <!--ステータス-->
+                <td>
+                    <form th:action="@{/update/status}" th:object="${formModel}" th:method="put">
+                        <div class="status">
+                            <select name="status">
+                                <option value="0" th:selected="${content.status == 0}"> 未着手</option>
+                                <option value="1" th:selected="${content.status == 1}"> 実行中</option>
+                                <option value="2" th:selected="${content.status == 2}"> ステイ中</option>
+                                <option value="3" th:selected="${content.status == 3}"> 完了</option>
+                            </select>
+                            <input type="hidden" name="id" th:value="${content.id}" />
+                            <input class="confirm-action-status-btn" type="submit" value="変更"/>
+                        </div>
+                    </form>
+                </td>
+                <!--タスク期限 （今日以前・・・赤　今日より後・・・黄色）-->
+                <td class="limit">
+                    <div class="limit-before" th:if="${today >= #dates.format(content.limitDate, 'yyyy/MM/dd')}">
+                        <span th:text="${#dates.format(content.limitDate, 'yyyy/MM/dd')}"></span>
+                    </div>
+                    <div class="limit-after" th:if="${today < #dates.format(content.limitDate, 'yyyy/MM/dd')}">
+                        <span th:text="${#dates.format(content.limitDate, 'yyyy/MM/dd')}"></span>
+                    </div>
+                </td>
+                <!--編集ボタン-->
+                <td class="edit-button">
+                    <form th:action="@{/edit/{id}(id=${content.id})}">
+                        <input type="submit" value="編集"/>
+                    </form>
+                </td>
+                <!--削除ボタン-->
+                <td class="delete-button">
+                    <form th:action="@{/delete/{id}(id=${content.id})}" th:method="delete">
+                        <div>
+                            <input class="confirm-action-btn" type="submit" value="削除">
+                        </div>
+                    </form>
+                </td>
+            </tr>
+        </table>
     </div>
-</div>
-<div>
     <script>
-        var btn = document.getElementById("status-btn");
-        btn.addEventListener("click", function() {
-            var result = window.confirm("変更してもよろしいですか？");
-            if( result ) {
-                alert("OKがクリックされました");
-            } else {
-                event.preventDefault();
-                alert("キャンセルがクリックされました");
-            }
+        //★ステータス変更ボタンへのダイアログ機能→クラス名とconfirmStatusButtonsに変更したらOK
+        // 'confirm-action-status-btn' クラスを持つすべての要素を取得
+        const confirmStatusButtons = document.querySelectorAll('.confirm-action-status-btn');
+
+        // 取得した各ボタンに対してループ処理を行う
+        confirmStatusButtons.forEach(button => {
+            button.addEventListener("click", function(event) {
+                // data-message 属性から確認メッセージを取得
+                const message = this.dataset.message || "変更してもよろしいですか？"; // デフォルトメッセージも設定
+
+                var result = window.confirm(message);
+                    if( result ) {
+                        alert("OKがクリックされました");
+                        // もしフォーム送信やリンク遷移を続行させたい場合は、ここで event.preventDefault() を書かない
+                        // または、alert("OKがクリックされました"); 以外の処理を行う
+                    } else {
+                        event.preventDefault(); // デフォルトの動作をキャンセル
+                        alert("キャンセルがクリックされました");
+                    }
+            });
+        });
+
+        //★削除ボタンへのダイアログ機能
+        // 'confirm-action-btn' クラスを持つすべての要素を取得
+        const confirmButtons = document.querySelectorAll('.confirm-action-btn');
+
+        //取得した各ボタンに対してループ処理を行う
+        confirmButtons.forEach(button => {
+            button.addEventListener("click", function(event) {
+                // data-message 属性から確認メッセージを取得
+                const message = this.dataset.message || "削除してもよろしいですか？"; // デフォルトメッセージも設定
+
+                var result = window.confirm(message);
+                    if( result ) {
+                        alert("OKがクリックされました");
+                    // もしフォーム送信やリンク遷移を続行させたい場合は、ここで event.preventDefault() を書かない
+                    // または、alert("OKがクリックされました"); 以外の処理を行う
+                    } else {
+                        event.preventDefault(); // デフォルトの動作をキャンセル
+                        alert("キャンセルがクリックされました");
+                    }
+            });
         });
     </script>
-</div>
-<div>
-    <script>
-        var btn = document.getElementById("btn");
-        btn.addEventListener("click", function() {
-            var result = window.confirm("削除してもよろしいですか？");
-            if( result ) {
-                alert("OKがクリックされました");
-            } else {
-                event.preventDefault();
-                alert("キャンセルがクリックされました");
-            }
-        });
-    </script>
-</div>
 </body>
 </html>
