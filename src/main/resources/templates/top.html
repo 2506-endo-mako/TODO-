@@ -34,10 +34,11 @@
                 <!--★ステータス-->
                 ステータス
                 <select name="status">
-                    <option value="0" th:selected="${status == 0}">未着手</option>
-                    <option value="1" th:selected="${status == 1}">実行中</option>
-                    <option value="2" th:selected="${status == 2}">ステイ中</option>
-                    <option value="3" th:selected="${status == 3}">完了</option>
+                    <option value="" th:selected="${status == null}">選択無し</option>
+                    <option value="1" th:selected="${status == 1}">未着手</option>
+                    <option value="2" th:selected="${status == 2}">実行中</option>
+                    <option value="3" th:selected="${status == 3}">ステイ中</option>
+                    <option value="4" th:selected="${status == 4}">完了</option>
                 </select>
 
                 <!--★タスク内容-->
@@ -61,19 +62,19 @@
             </td>
             <!--ステータス-->
             <td>
-            <form th:action="@{/update/status}" th:object="${formModel}" th:method="put">
-                <div class="status">
-                    <select name="status">
-                        <option value="0" th:selected="${content.status == 0}"> 未着手</option>
-                    <option value="1" th:selected="${content.status == 1}"> 実行中</option>
-                    <option value="2" th:selected="${content.status == 2}"> ステイ中</option>
-                    <option value="3" th:selected="${content.status == 3}"> 完了</option>
-                </select>
-                <input type="hidden" name="id" th:value="${content.id}" />
-                    <input id="status-btn" type="submit" value="変更"/>
+                <form th:action="@{/update/status}" th:object="${formModel}" th:method="put">
+                    <div class="status">
+                        <select name="status">
+                            <option value="1" th:selected="${content.status == 1}"> 未着手</option>
+                            <option value="2" th:selected="${content.status == 2}"> 実行中</option>
+                            <option value="3" th:selected="${content.status == 3}"> ステイ中</option>
+                            <option value="4" th:selected="${content.status == 4}"> 完了</option>
+                        </select>
+                        <input type="hidden" name="id" th:value="${content.id}"/>
+                        <input id="status-btn" type="submit" value="変更"/>
 
-                </div>
-            </form>
+                    </div>
+                </form>
             </td>
             <!--タスク期限 （今日以前・・・赤　今日より後・・・黄色）-->
             <td class="limit">
@@ -93,17 +94,15 @@
             <!--削除ボタン-->
             <td class="delete-button">
                 <form th:action="@{/delete/{id}(id=${content.id})}" th:method="delete">
-                   <div>
-                    <input id="btn" type="submit" value="削除">
-                   </div>
+                    <div>
+                        <input id="btn" type="submit" value="削除">
+                    </div>
                 </form>
             </td>
         </tr>
     </table>
-            </div>
-        </div>
-    </div>
 </div>
+
 <div>
     <script>
         var btn = document.getElementById("status-btn");

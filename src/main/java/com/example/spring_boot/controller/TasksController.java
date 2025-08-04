@@ -107,8 +107,8 @@ public class TasksController {
             return new ModelAndView("redirect:/new");
         }
 
-        //初期値として0(未着手)を設定
-        tasksForm.setStatus(0);
+        //初期値として1(未着手)を設定
+        tasksForm.setStatus(1);
         tasksService.saveTasks(tasksForm);
         return new ModelAndView("redirect:/");
     }

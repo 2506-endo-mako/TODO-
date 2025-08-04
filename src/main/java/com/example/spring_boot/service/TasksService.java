@@ -52,7 +52,7 @@ public class TasksService {
         //②日付とステータス③ステータスのみ④日付と内容⑥内容とステータス⑦日付と内容とステータス
         //日付のみ（初期表示　→　全取得したい）
         if(StringUtils.isEmpty(content) && status == null) {
-            results = tasksRepository.findAll();
+            results = tasksRepository.findByLimitDateBetweenOrderByLimitDateAsc(start, end);
         }
         //②内容のみ無い　→　日付とステータスはある
         if(StringUtils.isEmpty(content) && status != null){
