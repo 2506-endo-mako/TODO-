@@ -34,10 +34,10 @@
                     <!--★ステータス-->
                     ステータス
                     <select name="status">
-                        <option value="0" th:selected="${status == 0}">未着手</option>
-                        <option value="1" th:selected="${status == 1}">実行中</option>
-                        <option value="2" th:selected="${status == 2}">ステイ中</option>
-                        <option value="3" th:selected="${status == 3}">完了</option>
+                        <option value="1" th:selected="${status == 1}">未着手</option>
+                        <option value="2" th:selected="${status == 2}">実行中</option>
+                        <option value="3" th:selected="${status == 3}">ステイ中</option>
+                        <option value="4" th:selected="${status == 4}">完了</option>
                     </select>
 
                     <!--★タスク内容-->
@@ -64,10 +64,10 @@
                     <form th:action="@{/update/status}" th:object="${formModel}" th:method="put">
                         <div class="status">
                             <select name="status">
-                                <option value="0" th:selected="${content.status == 0}"> 未着手</option>
-                                <option value="1" th:selected="${content.status == 1}"> 実行中</option>
-                                <option value="2" th:selected="${content.status == 2}"> ステイ中</option>
-                                <option value="3" th:selected="${content.status == 3}"> 完了</option>
+                                <option value="1" th:selected="${content.status == 1}"> 未着手</option>
+                                <option value="2" th:selected="${content.status == 2}"> 実行中</option>
+                                <option value="3" th:selected="${content.status == 3}"> ステイ中</option>
+                                <option value="4" th:selected="${content.status == 4}"> 完了</option>
                             </select>
                             <input type="hidden" name="id" th:value="${content.id}" />
                             <input class="confirm-action-status-btn" type="submit" value="変更"/>
