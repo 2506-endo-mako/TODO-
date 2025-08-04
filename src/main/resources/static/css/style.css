@@ -1,5 +1,5 @@
 body {
-	background-color: #E0FFFF;
+	background-color: #FFFFBB;
 }
 
 .header-contents {
@@ -9,7 +9,7 @@ body {
 .main-contents {
 	margin: 20px;
 	padding: 10px 10px 5px 10px;
-	background-color: #B4CCCC;
+	background-color: #FFA500;
 	height: 100%;
 	width: 80%;
 }

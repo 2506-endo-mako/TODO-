@@ -29,7 +29,7 @@ public class Tasks {
         @Column
         private Integer status;
 
-        @Column(name = "limit_date",insertable = true, updatable = false)
+        @Column(name = "limit_date",insertable = true, updatable = true)
         @DateTimeFormat(pattern = "yyyy-MM-dd")
         private Date limitDate;
 
