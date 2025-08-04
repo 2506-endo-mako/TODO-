@@ -17,7 +17,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-
 @Controller
 public class TasksController {
     @Autowired
@@ -34,7 +33,7 @@ public class TasksController {
                             @RequestParam(name = "end_date", required = false) String endDate,
                             @RequestParam(name = "content", required = false) String content,
                             @RequestParam(name = "status", required = false) Integer status
-                            )throws ParseException {
+    ) throws ParseException {
         ModelAndView mav = new ModelAndView();
         // タスクを全件取得
         List<TasksForm> contentData = tasksService.findAllTasks(startDate, endDate, content, status);
@@ -46,13 +45,14 @@ public class TasksController {
         mav.addObject("endDate", endDate);
         mav.addObject("content", content);
         mav.addObject("status", status);
-        mav.addObject("errorMessages",session.getAttribute("errorMessages"));
 
         //今日の日付をString型に変換
         LocalDate today = LocalDate.now();
         String todayStr = today.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         mav.addObject("today", todayStr);
-        session.invalidate();
+
+        //エラー表示
+        setErrorMessage(mav);
         return mav;
     }
 
@@ -65,28 +65,8 @@ public class TasksController {
         TasksForm tasksForm = new TasksForm();
         mav.setViewName("/new");
         mav.addObject("formModel", tasksForm);
-        return mav;
-    }
-
-    /*
-     *編集画面表示
-     */
-    @GetMapping("/edit/{id}")
-    public ModelAndView editContent(@PathVariable String id) {
-        //List<String> errorMessages = new ArrayList<>();
-        ModelAndView mav = new ModelAndView();
-        //バリデーション
-        if(!id.matches("^[0-9]*$")) {
-                session.setAttribute("errorMessages", "・不正なパラメータです");
-                return new ModelAndView("redirect:/");
-        }
-
-        Integer intId = Integer.parseInt(id);
-        //編集する投稿を取得
-        TasksForm tasks = tasksService.editTasks(intId);
-        mav.setViewName("/edit");
-        // 編集内容を保管
-        mav.addObject("formModel", tasks);
+        //エラー表示
+        setErrorMessage(mav);
         return mav;
     }
 
@@ -130,11 +110,35 @@ public class TasksController {
     }
 
     /*
+     *編集画面表示
+     */
+    @GetMapping("/edit/{id}")
+    public ModelAndView editContent(@PathVariable String id) {
+        //List<String> errorMessages = new ArrayList<>();
+        ModelAndView mav = new ModelAndView();
+        //バリデーション
+        if (!id.matches("^[0-9]*$")) {
+            session.setAttribute("errorMessages", "・不正なパラメータです");
+            return new ModelAndView("redirect:/");
+        }
+
+        Integer intId = Integer.parseInt(id);
+        //編集する投稿を取得
+        TasksForm tasks = tasksService.editTasks(intId);
+        mav.setViewName("/edit");
+        // 編集内容を保管
+        mav.addObject("formModel", tasks);
+        //エラー表示
+        setErrorMessage(mav);
+        return mav;
+    }
+
+    /*
      * 編集処理
      */
     @PutMapping("/update/{id}")
-    public ModelAndView updateContent (@PathVariable Integer id,
-                                       @Validated @ModelAttribute("formModel") TasksForm tasks, BindingResult result) {
+    public ModelAndView updateContent(@PathVariable Integer id,
+                                      @Validated @ModelAttribute("formModel") TasksForm tasks, BindingResult result) {
         //バリデーション
         if (result.hasErrors()) {
             List<String> errorMessages = new ArrayList<>();
@@ -167,7 +171,7 @@ public class TasksController {
      */
     private void setErrorMessage(ModelAndView mav) {
         //errorMessagesがnullでなければビューに渡す
-        if(session.getAttribute("errorMessages") != null) {
+        if (session.getAttribute("errorMessages") != null) {
             mav.addObject("errorMessages", session.getAttribute("errorMessages"));
 
             //sessionの破棄
