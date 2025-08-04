@@ -11,7 +11,7 @@
 </div>
 <!--エラーメッセージ -->
 <div class="errorMessages" th:each="errorMessage : ${errorMessages}">
-    <span th:text="${errorMessage}"></span>
+    <li><span th:text="${errorMessage}"></span></li>
 </div>
 <div class="main-contents">
     <form th:action="@{/update/{id}(id=${formModel.id})}" th:object="${formModel}" th:method="put">
