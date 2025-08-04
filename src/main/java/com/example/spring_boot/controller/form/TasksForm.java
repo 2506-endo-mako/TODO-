@@ -1,10 +1,7 @@
 package com.example.spring_boot.controller.form;
 
 import jakarta.persistence.Column;
-import jakarta.validation.constraints.FutureOrPresent;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -19,6 +16,7 @@ public class TasksForm {
     private int id;
 
     @NotBlank(message = "タスクを入力してください")
+    @Pattern(regexp = "[^\\u3000]*", message = "タスクを入力してください")
     @Size(max = 140, message = "タスクは140文字以内で入力してください")
     private String content;
 

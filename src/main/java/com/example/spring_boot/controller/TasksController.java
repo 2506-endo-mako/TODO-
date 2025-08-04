@@ -5,6 +5,7 @@ import com.example.spring_boot.service.TasksService;
 import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -54,12 +55,13 @@ public class TasksController {
         mav.addObject("endDate", endDate);
         mav.addObject("content", content);
         mav.addObject("status", status);
+        session.setAttribute("errorMessages", "不正なパラメータです");
 
         //今日の日付をString型に変換
         LocalDate today = LocalDate.now();
         String todayStr = today.format(DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         mav.addObject("today", todayStr);
-
+        session.invalidate();
         return mav;
     }
 
@@ -77,13 +79,23 @@ public class TasksController {
     }
 
     /*
-     *投稿の編集画面表示
+     *編集画面表示
      */
     @GetMapping("/edit/{id}")
-    public ModelAndView editContent(@PathVariable Integer id) {
+    public ModelAndView editContent(@PathVariable String id) {
+        //List<String> errorMessages = new ArrayList<>();
         ModelAndView mav = new ModelAndView();
+        //バリデーション
+        String tasksId = String.valueOf(id);
+        if(!tasksId.matches("^[0-9]*$")) {
+
+                session.setAttribute("errorMessages", "不正なパラメータです");
+                return new ModelAndView("redirect:/");
+        }
+
+        Integer intId = Integer.parseInt(id);
         //編集する投稿を取得
-        TasksForm tasks = tasksService.editTasks(id);
+        TasksForm tasks = tasksService.editTasks(intId);
         mav.setViewName("/edit");
         // 編集内容を保管
         mav.addObject("formModel", tasks);

@@ -100,7 +100,7 @@ public class TasksService {
     }
 
     /*
-     * ステータス更新＋追加
+     * ステータス更新
      */
     public void updateTasks(TasksForm reqTasks) {
         //select文流す　WHERE句はkEYのidのみ
@@ -182,9 +182,9 @@ public class TasksService {
     /*
      * 編集する投稿を１件取得
      */
-    public TasksForm editTasks(Integer id) {
+    public TasksForm editTasks(Integer intId) {
         List<Tasks> results = new ArrayList<>();
-        results.add((Tasks) tasksRepository.findById(id).orElse(null)); //nullかもしれない（optional）
+        results.add((Tasks) tasksRepository.findById(intId).orElse(null)); //nullかもしれない（optional）
         List<TasksForm> tasks2 = setTasksForm(results);
         return tasks2.get(0);
     }
