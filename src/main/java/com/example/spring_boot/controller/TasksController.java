@@ -55,7 +55,7 @@ public class TasksController {
         mav.addObject("endDate", endDate);
         mav.addObject("content", content);
         mav.addObject("status", status);
-        session.setAttribute("errorMessages", "不正なパラメータです");
+        mav.addObject("errorMessages",session.getAttribute("errorMessages"));
 
         //今日の日付をString型に変換
         LocalDate today = LocalDate.now();
@@ -86,10 +86,8 @@ public class TasksController {
         //List<String> errorMessages = new ArrayList<>();
         ModelAndView mav = new ModelAndView();
         //バリデーション
-        String tasksId = String.valueOf(id);
-        if(!tasksId.matches("^[0-9]*$")) {
-
-                session.setAttribute("errorMessages", "不正なパラメータです");
+        if(!id.matches("^[0-9]*$")) {
+                session.setAttribute("errorMessages", "・不正なパラメータです");
                 return new ModelAndView("redirect:/");
         }
 
@@ -99,7 +97,6 @@ public class TasksController {
         mav.setViewName("/edit");
         // 編集内容を保管
         mav.addObject("formModel", tasks);
-        setErrorMessage(mav);
         return mav;
     }
 
