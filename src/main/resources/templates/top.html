@@ -6,30 +6,30 @@
     <title>TOP</title>
 </head>
 <body>
-<div class="header-contents">
-    <h1>ToDoリスト</h1>
-</div>
-<!--エラーメッセージ -->
-<div class="errorMessages" th:each="errorMessage : ${errorMessages}">
-    <li><span th:text="${errorMessage}"/></li>
-</div>
-<div class="main-contents">
-    <div class="date">
-        本日の日付：<span th:text="${today}"></span>
+    <div class="header-contents">
+        <h1>ToDoリスト</h1>
     </div>
-    <!--新規タスク-->
-    <a href="/new">
-        <button class="new-button" type="button">新規タスク</button>
-    </a>
-    <div>
-        <form th:method="get" action="./" th:object="${formModel}">
-            <div class="form-area">
-                <!--フォームの要素の見出しを表すタグ(label)-->
-                期限
-                <!-- nameがControllerに渡したい情報　valueが初期表示させたい情報 -->
-                <input type="date" name="start_date" th:value="${startDate}">
-                ～
-                <input type="date" name="end_date" th:value="${endDate}">
+    <!--エラーメッセージ -->
+    <div class="errorMessages" th:each="errorMessage : ${errorMessages}">
+        <li><span th:text="${errorMessage}"/></li>
+    </div>
+    <div class="main-contents">
+        <div class="date">
+            本日の日付：<span th:text="${today}"></span>
+        </div>
+        <!--新規タスク-->
+        <a href="/new">
+            <button class="new-button" type="button">新規タスク</button>
+        </a>
+        <div>
+            <form th:method="get" action="./" th:object="${formModel}">
+                <div class="form-area">
+                    <!--フォームの要素の見出しを表すタグ(label)-->
+                    期限
+                    <!-- nameがControllerに渡したい情報　valueが初期表示させたい情報 -->
+                    <input type="date" name="start_date" th:value="${startDate}">
+                    ～
+                    <input type="date" name="end_date" th:value="${endDate}">
 
                 <!--★ステータス-->
                 ステータス
@@ -40,7 +40,6 @@
                     <option value="3" th:selected="${status == 3}">ステイ中</option>
                     <option value="4" th:selected="${status == 4}">完了</option>
                 </select>
-
                 <!--★タスク内容-->
                 タスク内容
                 <input type="text" name="content" th:value="${content}">
@@ -105,29 +104,48 @@
 
 <div>
     <script>
-        var btn = document.getElementById("status-btn");
-        btn.addEventListener("click", function() {
-            var result = window.confirm("変更してもよろしいですか？");
-            if( result ) {
-                alert("OKがクリックされました");
-            } else {
-                event.preventDefault();
-                alert("キャンセルがクリックされました");
-            }
+        //★ステータス変更ボタンへのダイアログ機能→クラス名とconfirmStatusButtonsに変更したらOK
+        // 'confirm-action-status-btn' クラスを持つすべての要素を取得
+        const confirmStatusButtons = document.querySelectorAll('.confirm-action-status-btn');
+
+        // 取得した各ボタンに対してループ処理を行う
+        confirmStatusButtons.forEach(button => {
+            button.addEventListener("click", function(event) {
+                // data-message 属性から確認メッセージを取得
+                const message = this.dataset.message || "変更してもよろしいですか？"; // デフォルトメッセージも設定
+
+                var result = window.confirm(message);
+                    if( result ) {
+                        alert("OKがクリックされました");
+                        // もしフォーム送信やリンク遷移を続行させたい場合は、ここで event.preventDefault() を書かない
+                        // または、alert("OKがクリックされました"); 以外の処理を行う
+                    } else {
+                        event.preventDefault(); // デフォルトの動作をキャンセル
+                        alert("キャンセルがクリックされました");
+                    }
+            });
         });
-    </script>
-</div>
-<div>
-    <script>
-        var btn = document.getElementById("btn");
-        btn.addEventListener("click", function() {
-            var result = window.confirm("削除してもよろしいですか？");
-            if( result ) {
-                alert("OKがクリックされました");
-            } else {
-                event.preventDefault();
-                alert("キャンセルがクリックされました");
-            }
+
+        //★削除ボタンへのダイアログ機能
+        // 'confirm-action-btn' クラスを持つすべての要素を取得
+        const confirmButtons = document.querySelectorAll('.confirm-action-btn');
+
+        //取得した各ボタンに対してループ処理を行う
+        confirmButtons.forEach(button => {
+            button.addEventListener("click", function(event) {
+                // data-message 属性から確認メッセージを取得
+                const message = this.dataset.message || "削除してもよろしいですか？"; // デフォルトメッセージも設定
+
+                var result = window.confirm(message);
+                    if( result ) {
+                        alert("OKがクリックされました");
+                    // もしフォーム送信やリンク遷移を続行させたい場合は、ここで event.preventDefault() を書かない
+                    // または、alert("OKがクリックされました"); 以外の処理を行う
+                    } else {
+                        event.preventDefault(); // デフォルトの動作をキャンセル
+                        alert("キャンセルがクリックされました");
+                    }
+            });
         });
     </script>
 </div>
