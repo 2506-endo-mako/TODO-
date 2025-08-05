@@ -22,7 +22,7 @@
             <button class="new-button" type="button">新規タスク</button>
         </a>
         <div>
-            <form th:method="get" action="./" th:object="${formModel}">
+            <form th:method="get" action="./">
                 <div class="form-area">
                     <!--フォームの要素の見出しを表すタグ(label)-->
                     期限
@@ -61,7 +61,7 @@
             </td>
             <!--ステータス-->
             <td>
-                <form th:action="@{/update/status}" th:object="${formModel}" th:method="put">
+                <form th:action="@{/update/status}" th:method="put">
                     <div class="status">
                         <select name="status">
                             <option value="1" th:selected="${content.status == 1}"> 未着手</option>
