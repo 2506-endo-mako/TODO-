@@ -48,18 +48,23 @@ public class TasksService {
         }
         //宣言する
         List<Tasks> results = null;
-//分岐させたい
+        //分岐させたい
         //②日付とステータス③ステータスのみ④日付と内容⑥内容とステータス⑦日付と内容とステータス
         //日付のみ（初期表示　→　全取得したい）
         if(StringUtils.isEmpty(content) && status == null) {
             results = tasksRepository.findByLimitDateBetweenOrderByLimitDateAsc(start, end);
         }
-        //②内容のみ無い　→　日付とステータスはある
+        //日付とステータス
         if(StringUtils.isEmpty(content) && status != null){
                 results = tasksRepository.findByLimitDateBetweenAndStatusOrderByLimitDateAsc(start, end, status);
-          }
-        //内容と日付
-        if(!StringUtils.isEmpty(content)) {
+        }
+        //日付と内容
+        if(!StringUtils.isEmpty(content) && status == null) {
+            results = tasksRepository.findByLimitDateBetweenAndContentOrderByLimitDateAsc(start, end, content);
+        }
+
+        //内容と日付とステータス
+        if(!StringUtils.isEmpty(content) && status != null) {
             results = tasksRepository.findByLimitDateBetweenAndContentAndStatusOrderByLimitDateAsc(start, end, content, status);
         }
 
