@@ -10,12 +10,14 @@ import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.thymeleaf.util.StringUtils;
 
 import java.text.ParseException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 public class TasksController {
@@ -34,6 +36,7 @@ public class TasksController {
                             @RequestParam(name = "content", required = false) String content,
                             @RequestParam(name = "status", required = false) Integer status
     ) throws ParseException {
+
         ModelAndView mav = new ModelAndView();
         // タスクを全件取得
         List<TasksForm> contentData = tasksService.findAllTasks(startDate, endDate, content, status);
@@ -45,6 +48,16 @@ public class TasksController {
         mav.addObject("endDate", endDate);
         mav.addObject("content", content);
         mav.addObject("status", status);
+        mav.addObject("errorMessages", session.getAttribute("errorMessages"));
+
+//        //バリデーション「期限」には日付以外、statusには数字以外をバリデーションしたい
+//        //期限は文字列だから「数字ではない」とすると、あてはまってしまう
+//        //ステータスは数字だからmatchesが使えない
+//
+//        if (!startDate.matches("\\d{4}/\\d{2}/\\d{2}\uFEFF") || !endDate.matches("\\d{4}/\\d{2}/\\d{2}\uFEFF")) {
+//            session.setAttribute("errorMessages", " ・不正なパラメータです");
+//            return new ModelAndView("redirect:/");
+//        }
 
         //今日の日付をString型に変換
         LocalDate today = LocalDate.now();
@@ -112,19 +125,36 @@ public class TasksController {
     /*
      *編集画面表示
      */
-    @GetMapping("/edit/{id}")
-    public ModelAndView editContent(@PathVariable String id) {
-        //List<String> errorMessages = new ArrayList<>();
+    @GetMapping(value={"edit/", "edit/{id}"})
+    @ResponseBody
+    public ModelAndView editContent(@PathVariable (required = false) Optional<String> id) {
+        List<String> errorMessages = new ArrayList<>();
         ModelAndView mav = new ModelAndView();
         //バリデーション
-        if (!id.matches("^[0-9]*$")) {
+        //Optionalは固まりだから、中身のidを取り出す
+        //Optional<String> optionalString = Optional.of(String.valueOf(id));
+        //Optional<String>型だとmatchesが使えないから、String型の変数に入れた
+        String Id = id.orElse(null);
+
+        //Optional型だと、数字ではなくOptional[数字]になり、文字として判断されてしまう→エラーメッセージが表示され、編集画面にいけない
+        //Optionalをアンラップしたい
+        //String unwrappingId = Id.orElse();
+
+
+        if (!Id.matches("^[0-9]*$") || Id == null) {
             session.setAttribute("errorMessages", "・不正なパラメータです");
             return new ModelAndView("redirect:/");
         }
 
-        Integer intId = Integer.parseInt(id);
+        Integer intId = Integer.parseInt(Id);
         //編集する投稿を取得
         TasksForm tasks = tasksService.editTasks(intId);
+
+        if (tasks == null) {
+            session.setAttribute("errorMessages", "・不正なパラメータです");
+            return new ModelAndView("redirect:/");
+        }
+
         mav.setViewName("/edit");
         // 編集内容を保管
         mav.addObject("formModel", tasks);

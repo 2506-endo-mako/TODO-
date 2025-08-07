@@ -190,6 +190,12 @@ public class TasksService {
     public TasksForm editTasks(Integer intId) {
         List<Tasks> results = new ArrayList<>();
         results.add((Tasks) tasksRepository.findById(intId).orElse(null)); //nullかもしれない（optional）
+        //①resultsから0番目の要素を取り出して新しい変数に入れる
+        Tasks result = results.get(0);
+        //②取り出した変数がnullかどうかチェックする→③nullだったらnullを返す
+        if(result == null){
+            return null;
+        }
         List<TasksForm> tasks2 = setTasksForm(results);
         return tasks2.get(0);
     }
